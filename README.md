@@ -5,7 +5,24 @@ Reproducible benchmark for comparing inference throughput between
 
 ---
 
+## Assumptions
+
+The following assumptions were made in the design and execution of this benchmark.
+If any of these do not hold in your environment, results may not transfer directly.
+
+| # | Assumption | Impact if violated |
+|---|---|---|
+| 1 | **Results included are from demo mode (synthetic curves).** Run with `--vllm-url` / `--friendli-url` against real servers to obtain measured data. | Included graph does not reflect actual system performance. |
+| 2 | **Both engines are already deployed** and reachable via OpenAI-compatible endpoints. | Real benchmark mode will fail to connect. |
+| 3 | **Both engines serve the same model** with identical weights and precision (bfloat16). | Throughput differences would reflect model differences, not engine efficiency. |
+| 4 | **Requests use fixed input/output token lengths** (512 in / 256 out). Real production workloads have variable request shapes. | Measured throughput may be higher or lower under variable-length distributions. |
+
+---
+
 ## Result
+
+> **Note:** The graph below was generated using `--demo` mode (synthetic scaling curves).
+> To obtain real measurements, run the benchmark against deployed inference servers as described in [How to Run](#how-to-run).
 
 ![Benchmark Result](benchmark_result.png)
 
@@ -73,6 +90,7 @@ python benchmark.py --demo
 | API format | OpenAI-compatible `/v1/chat/completions` (streaming) |
 
 Input and output lengths are fixed to reduce workload variability between runs.
+See [Assumptions](#assumptions) for the implications of this design choice.
 
 ---
 
